@@ -11,7 +11,9 @@ import {
     Platform,
     Alert,
     BackHandler,
-    ActivityIndicator
+    ActivityIndicator,
+    Keyboard,
+    KeyboardAvoidingView
 } from 'react-native';
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
 
@@ -58,17 +60,20 @@ export default function Screen_FirebaseNotif({ navigation, route }) {
 
 
     const sendFCMNotifs = async () => {
-setLoader(true)
+        setLoader(true)
         try {
             let url = `${ip}/sendFCM`
             if (TitleText.length === 0 || MessageText.length === 0) {
                 Alert.alert("Empty fields")
+                setLoader(false)
             }
             else {
                 let notifData = {
                     title: TitleText.trim(),
                     body: MessageText.trim()
                 }
+                Alert.alert("Success", "Notification was sent to all users")
+                setLoader(false)
                 let response = await fetch(url, {
                     method: 'POST',
                     headers: {
@@ -78,8 +83,6 @@ setLoader(true)
                 })
                 // response = response.json();
                 // console.log(response)
-                setLoader(false)
-                Alert.alert("Success", "Notification was sent to all users")
             }
         } catch (error) {
             setLoader(false)
@@ -127,70 +130,39 @@ setLoader(true)
     useEffect(() => {
 
 
-
-        async function Logged() {
-            try {
-                let url = `${ip}/verifyToken`
-                const credentials = await Keychain.getGenericPassword();
-                let response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': "application/json"
-                    },
-                    body: JSON.stringify(credentials)
-                })
-                //    console.log(response.text())
-                response = await response.json();
-
-                if (response.success === true) {
-                    navigation.navigate('Screen_Home')
-
-                }
-                else if (response.success === false) {
-
-                }
-
-            } catch (error) {
-                // console.info(error)
-            }
-        }
-        // Logged();
-
-
     }, [])
-
-
-    // const [text, setText] = useState('');
 
 
     return (
         <>
-            <View style={styles.body}>
+            <KeyboardAvoidingView enabled behavior={Platform.OS === 'ios' ? 'padding' : 'null'} style={{ flex: 1 }} >
 
-                <Text style={styles.welcome_text}>Firebase notifications</Text>
+                <View style={styles.body}>
 
-                <View style={styles.UsernameInputBoxView}>
+                    <Text style={styles.welcome_text}>Firebase notifications</Text>
 
-                    <TextInput onChangeText={(value) => onHandleTitleChange(value)} style={[styles.UsernameInputBox, { color: 'black' }]} editable placeholder='Title' placeholderTextColor={'black'} ></TextInput>
-                </View>
+                    <View style={styles.UsernameInputBoxView}>
 
-                <View style={styles.PasswordInputBoxView}>
+                        <TextInput onChangeText={(value) => onHandleTitleChange(value)} style={[styles.UsernameInputBox, { color: 'black' }]} editable onSubmitEditing={Keyboard.dismiss} placeholder='Title' placeholderTextColor={'black'} ></TextInput>
+                    </View>
 
-                    <TextInput onChangeText={(value) => onHandleMessageChange(value)} style={[styles.PasswordInputBox, { color: 'black' }]} editable placeholder='Message' placeholderTextColor={'black'} ></TextInput>
-                    {/* <Pressable onPress={goToForgotPasswordScreen} style={{ marginTop: 10 }}><Text style={[styles.text, { textAlign: 'right' }]}>Forgot password?</Text></Pressable> */}
-                </View>
+                    <View style={styles.PasswordInputBoxView}>
+
+                        <TextInput onChangeText={(value) => onHandleMessageChange(value)} style={[styles.PasswordInputBox, { color: 'black' }]} editable onSubmitEditing={Keyboard.dismiss} disabled={Loader} placeholder='Message' placeholderTextColor={'black'} ></TextInput>
+                    </View>
 
 
 
 
-                <Pressable onPress={() => { sendFCMNotifs() }
-                } style={{ width: '80%', height: 55, backgroundColor: '#0662bf', borderWidth: 1, marginTop: responsiveHeight(1), borderRadius: 10, alignSelf: 'center', justifyContent: 'center' }}>{Loader ? <ActivityIndicator size='large' color="#fff" /> :<Text style={{ fontSize: responsiveFontSize(2.2), color: 'white', textAlign: 'center' }}>Send notification</Text>}</Pressable>
+                    <Pressable onPress={() => { sendFCMNotifs() }
+                    } disabled={Loader} style={({ pressed }) => [pressed ? { opacity: 0.8 } : {}, { width: '80%', height: 55, backgroundColor: '#0662bf', borderWidth: 1, marginTop: responsiveHeight(1), borderRadius: 10, alignSelf: 'center', justifyContent: 'center' }]}>{Loader ? <ActivityIndicator size='large' color="#fff" /> : <Text style={{ fontSize: responsiveFontSize(2.2), color: 'white', textAlign: 'center' }}>Send notification</Text>}</Pressable>
 
 
 
 
 
             </View>
+        </KeyboardAvoidingView >
         </>
     )
 }
@@ -201,13 +173,9 @@ setLoader(true)
 const styles = StyleSheet.create({
     body: {
         flex: 1,
-        // width:'100%',
-        // height: '100vh',
-        // borderWidth: 4,
-        // borderColor: 'red',
         backgroundColor: 'white',
         alignItems: 'center',
-        justifyContent: 'start'
+        justifyContent: 'flex-start'
     },
 
     welcome_text: {
@@ -279,7 +247,7 @@ const styles = StyleSheet.create({
         marginBottom: 4,
     },
     loginBtn: {
-        flex: 1,
+        // flex: 1,
         width: 300,
         height: 100,
         color: 'white',
@@ -295,17 +263,7 @@ const styles = StyleSheet.create({
     LG: {
         borderRadius: 200,
     },
-    bottomText: {
-        flex: 0.6,
-        marginTop: '0%',
-        marginBottom: '5%',
-        alignItems: 'center',
-        flexDirection: 'row',
-        gap: 5,
-        alignSelf: ''
-    },
-    linkColor: {
-        color: 'red'
-    }
+
+
 
 });
