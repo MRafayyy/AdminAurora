@@ -9,7 +9,7 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 // import { Icon } from 'react-native-vector-icons/Icon';
 
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+// import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import NetInfo from "@react-native-community/netinfo";
 import { addEventListener } from "@react-native-community/netinfo";
 
@@ -29,8 +29,8 @@ import {
 } from 'react-native';
 import { NavigationContainer, DefaultTheme, DarkTheme, } from '@react-navigation/native';
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+// import Ionicons from 'react-native-vector-icons/Ionicons';
+// import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { Header, createStackNavigator } from '@react-navigation/stack';
 
@@ -61,8 +61,11 @@ import { useConnectionStatus } from './components/NoInternet';
 
 import ip from './screens/IPaddress';
 import { UserIdProvider } from './UserIdContext';
+import { connectToSocket } from './components/SocketServiceAdmin';
 
 function App() {
+
+  const socket = connectToSocket();
 
   const [isLoggedIn, setisLoggedIn] = useState(false)
 
@@ -127,13 +130,13 @@ function App() {
       <UserIdProvider>
 
         <NavigationContainer>
-          <Stack.Navigator initialRouteName='Screen_Login' screenOptions={{ animationEnabled: true, animationTypeForReplace: 'push', ...TransitionPresets.RevealFromBottomAndroid }}  >
+          <Stack.Navigator initialRouteName='HomeTabs' screenOptions={{ animationEnabled: true, animationTypeForReplace: 'push', ...TransitionPresets.RevealFromBottomAndroid }}  >
             {/* <Stack.Screen name="Screen_Splash" component={Screen_Splash} options={{ headerShown: false }} /> */}
             {/* <Stack.Screen name="Screen_Decider" component={Screen_Decider} options={{ headerShown: false }} /> */}
             <Stack.Screen name="Screen_Login" component={Screen_Login} options={{
               headerShown: false
             }} />
-           
+
             {/* <Stack.Screen name="Screen_Registration" component={Screen_Registration} options={{
               headerShown: false
             }} /> */}

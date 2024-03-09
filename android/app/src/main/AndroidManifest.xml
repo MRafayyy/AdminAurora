@@ -4,6 +4,11 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
 
+      <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
+
 <!-- <uses-permission android:name="android.permission.RECORD_AUDIO" /> -->
     
     <!-- <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" /> -->
@@ -39,5 +44,16 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
+
+ <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="AIzaSyBuCOu5bLUlVJmvxxGBFqDjvcsu5VeUyHY"/>
+
+                <!-- for real devices below api key -->
+             <!-- <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="AIzaSyA4HHx45fBoFy2TahURORLc5bdIyQ4pR9o"/> -->
+
+
     </application>
 </manifest>

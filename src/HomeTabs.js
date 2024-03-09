@@ -16,6 +16,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import UserIdContext from './UserIdContext';
+import Screen_Maps from './screens/Screen_Maps';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -43,7 +44,7 @@ export default function HomeTabs({ navigation, route }) {
         screenOptions={ ({ route }) => (
           {
             headerShown: true,
-            tabBarShowLabel: false,
+            tabBarShowLabel: true,
             tabBarLabelStyle: { fontSize: 10 },
             tabBarShowIcon: true,
             swipeEnabled: true,
@@ -73,6 +74,17 @@ export default function HomeTabs({ navigation, route }) {
           component={Screen_FirebaseNotif}
           options={{
             tabBarLabel: 'Notifs',
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons name="bell-outline" color={color} size={25} />
+            ),
+          }}
+        />
+
+        <Tab.Screen
+          name='Screen_Maps'
+          component={Screen_Maps}
+          options={{
+            tabBarLabel: 'Maps',
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons name="bell-outline" color={color} size={25} />
             ),
