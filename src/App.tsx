@@ -66,6 +66,7 @@ import { connectToSocket } from './components/SocketServiceAdmin';
 function App() {
 
   const socket = connectToSocket();
+  console.log("first"+socket)
 
   const [isLoggedIn, setisLoggedIn] = useState(false)
 
@@ -130,7 +131,7 @@ function App() {
       <UserIdProvider>
 
         <NavigationContainer>
-          <Stack.Navigator initialRouteName='HomeTabs' screenOptions={{ animationEnabled: true, animationTypeForReplace: 'push', ...TransitionPresets.RevealFromBottomAndroid }}  >
+          <Stack.Navigator initialRouteName='Login' screenOptions={{ animationEnabled: true, animationTypeForReplace: 'push', ...TransitionPresets.RevealFromBottomAndroid }}  >
             {/* <Stack.Screen name="Screen_Splash" component={Screen_Splash} options={{ headerShown: false }} /> */}
             {/* <Stack.Screen name="Screen_Decider" component={Screen_Decider} options={{ headerShown: false }} /> */}
             <Stack.Screen name="Screen_Login" component={Screen_Login} options={{
