@@ -71,54 +71,83 @@ export default function Screen_Maps({navigation}) {
       console.log('demnit');
     }
   };
+  
+  
+  useEffect(()=>{
+    
+      requestLocationPermission();
 
-  useEffect(() => {
-    // const socket = connectToSocket();
-    socket.on('bd', data => {
-      console.log('sooo');
-    });
+    socket.on('bd', (data)=>{
 
-    requestLocationPermission();
-
-    const watchId = Geolocation.watchPosition(
-      position => {
-        // setTimeout(()=>{
-        if (mapref.current != null) {
-          setmyLocation(position.coords);
-
-          // const socket= connectToSocket();
-          socket.emit('shareCoordinates', {hey: position.coords});
+      console.log("receiving user coordinates")
+      if (mapref.current != null) {
+        setmyLocation(data.Location)
+  
+          console.log("entered: "+data.Location.latitude)
 
           markerref?.current.animateMarkerToCoordinate(
             {
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
+              latitude: data.latitude,
+              longitude: data.longitude,
             },
             7000,
-          );
+            );
+        
         }
-        console.log(position);
+    });
 
-        // moveToLocation(position?.coords?.latitude, position?.coords?.longitude)
-      },
-      error => {
-        console.log(error);
-      },
-      {
-        enableHighAccuracy: true,
-        // fastestInterval: 5000,
-        timeout: 20000,
-        maximumAge: 0,
-        // interval: 1000,
-        distanceFilter: 1,
-      },
-    );
-    return () => {
-      Geolocation.clearWatch(watchId);
-      // socket.disconnect();
-      // socket.close();
-    };
-  }, []);
+    return(()=>{
+      socket.off('bd');
+    })
+  },[])
+
+  // useEffect(() => {
+   
+  //   socket.on('bd', data => {
+  //     console.log('sooo');
+  //   });
+
+  //   requestLocationPermission();
+
+  //   const watchId = Geolocation.watchPosition(
+  //     position => {
+  //       // setTimeout(()=>{
+  //       if (mapref.current != null) {
+  //         setmyLocation(position.coords);
+
+  //         // const socket= connectToSocket();
+  //         socket.emit('shareCoordinates', {hey: position.coords});
+
+  //         markerref?.current.animateMarkerToCoordinate(
+  //           {
+  //             latitude: position.coords.latitude,
+  //             longitude: position.coords.longitude,
+  //           },
+  //           7000,
+  //         );
+  //       }
+  //       console.log(position);
+
+  //       // moveToLocation(position?.coords?.latitude, position?.coords?.longitude)
+  //     },
+  //     error => {
+  //       console.log(error);
+  //     },
+  //     {
+  //       enableHighAccuracy: true,
+  //       // fastestInterval: 5000,
+  //       timeout: 20000,
+  //       maximumAge: 0,
+  //       // interval: 1000,
+  //       distanceFilter: 1,
+  //     },
+  //   );
+  //   return () => {
+  //     Geolocation.clearWatch(watchId);
+  //     // socket.disconnect();
+  //     // socket.close();
+  //   };
+  // }, []);
 
   const moveToLocation = async (latitude, longitude) => {
     console.log('full full' + latitude + '  ' + longitude);

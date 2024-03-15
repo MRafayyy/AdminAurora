@@ -61,6 +61,7 @@ export default function HomeTabs({ navigation, route }) {
             // header: ()=>null,
             // hey: route.params,
             tabBarLabel: 'Home',
+            lazy: true,
 
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons name="home" color={color} size={25} />
@@ -85,6 +86,7 @@ export default function HomeTabs({ navigation, route }) {
           component={Screen_Maps}
           options={{
             tabBarLabel: 'Maps',
+            lazy: true,
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons name="bell-outline" color={color} size={25} />
             ),
