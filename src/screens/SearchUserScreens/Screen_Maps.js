@@ -22,9 +22,13 @@ import {responsiveWidth} from 'react-native-responsive-dimensions';
 
 import MapViewDirections from 'react-native-maps-directions';
 
-import socket from '../components/SocketServiceAdmin';
+import socket from '../../components/SocketServiceAdmin';
 
-export default function Screen_Maps({navigation}) {
+export default function Screen_Maps({navigation, route}) {
+  const userId = route.params.item;
+  // console.log(userId)
+
+  const [showMap, setShowMap] = useState(false);
   const mapref = useRef(null);
   const markerref = useRef(null);
 
@@ -34,7 +38,7 @@ export default function Screen_Maps({navigation}) {
   const [destination, setDestination] = useState();
 
   function handleBackButtonClick() {
-    navigation.navigate('Screen_Home2');
+    navigation.goBack();
     return true;
   }
 
@@ -71,38 +75,34 @@ export default function Screen_Maps({navigation}) {
       console.log('demnit');
     }
   };
-  
-  
-  useEffect(()=>{
-    
-      requestLocationPermission();
 
-    socket.on('bd', (data)=>{
+  useEffect(() => {
+    requestLocationPermission();
 
-      console.log("receiving user coordinates")
+    socket.on(userId, data => {
+      setShowMap(true);
+      console.log('receiving user coordinates');
+      setmyLocation(data.Location);
       if (mapref.current != null) {
-        setmyLocation(data.Location)
-  
-          console.log("entered: "+data.Location.latitude)
+        console.log('entered: ' + data.Location.latitude);
 
-          markerref?.current.animateMarkerToCoordinate(
-            {
-              latitude: data.latitude,
-              longitude: data.longitude,
-            },
-            7000,
-            );
-        
-        }
+        markerref?.current.animateMarkerToCoordinate(
+          {
+            latitude: data.latitude,
+            longitude: data.longitude,
+          },
+          7000,
+        );
+      }
     });
 
-    return(()=>{
-      socket.off('bd');
-    })
-  },[])
+    return () => {
+      socket.off(userId);
+    };
+  }, []);
 
   // useEffect(() => {
-   
+
   //   socket.on('bd', data => {
   //     console.log('sooo');
   //   });
@@ -185,6 +185,18 @@ export default function Screen_Maps({navigation}) {
       moveToLocation(latitude, longitude);
     }
   };
+  if (showMap === false) {
+    return(
+      <View style={styles.body}>
+      <ActivityIndicator size='large' color="#00000" style={{justifyContent:'center', alignItems:'center'}} />
+      </View>
+    )
+    // return (
+    //   <View>
+    //     <Text style={{color: 'black'}}>No tracking available</Text>
+    //   </View>
+    // );
+  }
 
   return (
     <>
@@ -295,6 +307,7 @@ export default function Screen_Maps({navigation}) {
         </View>
 
         <MapView
+        
           ref={mapref}
           style={styles.map}
           region={{
@@ -402,4 +415,10 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     color: 'black',
   },
+  body: {
+    flex:1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'black'
+  }
 });

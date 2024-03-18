@@ -16,7 +16,9 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import UserIdContext from './UserIdContext';
-import Screen_Maps from './screens/Screen_Maps';
+import Screen_Maps from './screens/SearchUserScreens/Screen_Maps';
+import SearchTabs from './SearchStackTabs';
+import SearchStackTabs from './SearchStackTabs';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -81,7 +83,7 @@ export default function HomeTabs({ navigation, route }) {
           }}
         />
 
-        <Tab.Screen
+        {/* <Tab.Screen
           name='Screen_Maps'
           component={Screen_Maps}
           options={{
@@ -91,18 +93,18 @@ export default function HomeTabs({ navigation, route }) {
               <MaterialCommunityIcons name="bell-outline" color={color} size={25} />
             ),
           }}
-        />
+        /> */}
 
-        {/* <Tab.Screen
-          name='Screen_Home2'
-          component={Screen_Home2}
+        <Tab.Screen
+          name='SearchStack'
+          component={SearchStackTabs}
           options={{
-            tabBarLabel: 'Rescue',
+            tabBarLabel: 'Users',
             tabBarIcon: ({ color }) => (
-              <MaterialCommunityIcons name="security" color={color} size={25} />
+              <MaterialCommunityIcons name="account-multiple" color={color} size={25} />
             ),
           }}
-        /> */}
+        />
 
 
 

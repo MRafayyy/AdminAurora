@@ -62,6 +62,7 @@ import { useConnectionStatus } from './components/NoInternet';
 import ip from './screens/IPaddress';
 import { UserIdProvider } from './UserIdContext';
 import { connectToSocket } from './components/SocketServiceAdmin';
+import Screen_Splash from './screens/Screen_Splash';
 
 function App() {
 
@@ -131,9 +132,12 @@ function App() {
       <UserIdProvider>
 
         <NavigationContainer>
-          <Stack.Navigator initialRouteName='Login' screenOptions={{ animationEnabled: true, animationTypeForReplace: 'push', ...TransitionPresets.RevealFromBottomAndroid }}  >
+          <Stack.Navigator initialRouteName='Screen_Splash' screenOptions={{ animationEnabled: true, animationTypeForReplace: 'push', ...TransitionPresets.RevealFromBottomAndroid }}  >
             {/* <Stack.Screen name="Screen_Splash" component={Screen_Splash} options={{ headerShown: false }} /> */}
             {/* <Stack.Screen name="Screen_Decider" component={Screen_Decider} options={{ headerShown: false }} /> */}
+            <Stack.Screen name="Screen_Splash" component={Screen_Splash} options={{
+              headerShown: false
+            }} />
             <Stack.Screen name="Screen_Login" component={Screen_Login} options={{
               headerShown: false
             }} />
