@@ -1,10 +1,27 @@
-import { View, Text } from 'react-native'
+import { View, Text, Pressable, StyleSheet } from 'react-native'
 import React from 'react'
+import * as Keychain from 'react-native-keychain';
+export default function Screen_Home({navigation}) {
 
-export default function Screen_Home() {
+  const logout = async()=>{
+    await Keychain.resetGenericPassword();
+navigation.navigate('Screen_Login')
+  }
   return (
-    <View>
+    <View style={styles}>
       <Text>Screen_Home</Text>
+      <Pressable onPress={async()=>{
+      logout()
+        
+      }}><Text style={{color: 'black'}} >Log out</Text></Pressable>
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  body:{
+    flex:1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+})

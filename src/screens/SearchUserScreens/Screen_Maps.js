@@ -83,17 +83,21 @@ export default function Screen_Maps({navigation, route}) {
       setShowMap(true);
       console.log('receiving user coordinates');
       setmyLocation(data.Location);
-      if (mapref.current != null) {
+      if (mapref.current !== undefined || null) {
         console.log('entered: ' + data.Location.latitude);
 
-        markerref?.current.animateMarkerToCoordinate(
-          {
-            latitude: data.latitude,
-            longitude: data.longitude,
-          },
-          7000,
-        );
+        if(markerref.current !== undefined && markerref.current !== null){
+         
+          markerref?.current.animateMarkerToCoordinate(
+            {
+              latitude: data.latitude,
+              longitude: data.longitude,
+            },
+            7000,
+            );
+          }      
       }
+
     });
 
     return () => {
