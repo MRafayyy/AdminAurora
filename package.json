@@ -3,10 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
+    "android": "react-native run-android --deviceId emulator-5554 --port 8082",
     "ios": "react-native run-ios",
     "lint": "eslint .",
-    "start": "react-native start",
+    "start": "react-native start --port 8082",
     "test": "jest"
   },
   "dependencies": {
@@ -28,6 +28,7 @@
     "react-native-pager-view": "^6.2.3",
     "react-native-push-notification": "^8.1.1",
     "react-native-responsive-dimensions": "^3.1.1",
+    "react-native-responsive-screen": "^1.4.2",
     "react-native-safe-area-context": "^4.8.2",
     "react-native-screens": "^3.29.0",
     "react-native-tab-view": "^3.5.2",

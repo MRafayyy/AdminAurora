@@ -1,17 +1,59 @@
 import {View, Text, StyleSheet, Pressable, TextInput, KeyboardAvoidingView} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import ip from '../IPaddress';
+import colors from '../../utils/color';
 
 export default function Screen_UsersInfo({navigation, route}) {
+
   const [TitleText, setTitleText] = useState('');
   const [MessageText, setMessageText] = useState('');
   const [Loader, setLoader] = useState(false);
   const item = route.params.item;
+
+
+  const [tracking, setTracking] = useState(false);
+  const [receivedLocation, setReceivedLocation] = useState();
+
+  const getRescueStatus = async () => {
+    let response = await fetch(`${ip}/getRescueButtonStatus/${item._id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    response = await response.json();
+
+    if (response.status === true) {
+      setTracking(true);
+      setReceivedLocation(response.location);
+    }
+  };
+
+  useEffect(() => {
+    getRescueStatus();
+  }, []);
+
+  console.log(item._id)
+  // console.log(item.is_online)
+  const GoToTrackingPage = () => {
+    navigation.navigate('Screen_Maps', {
+      item: item._id,
+      receivedLocation: receivedLocation,
+    });
+  };
+
+
+
+
+
+
+
 
   const sendNotif = async () => {
     setLoader(true)
@@ -39,10 +81,7 @@ export default function Screen_UsersInfo({navigation, route}) {
       console.log(error);
     }
   };
-  // console.log(item.is_online)
-  const GoToTrackingPage = () => {
-    navigation.navigate('Screen_Maps', {item: item.userId});
-  };
+
 
   return (
     <KeyboardAvoidingView enabled behavior={Platform.OS === 'ios' ? 'padding' : 'null'} style={{ flex: 1 }} >
@@ -58,9 +97,9 @@ export default function Screen_UsersInfo({navigation, route}) {
         <Text style={styles.fieldValue}>{item.email}</Text>
       </View>
 
-      <Pressable onPress={GoToTrackingPage} style={styles.trackBtn}>
-        <Text style={{color: 'black', fontSize: responsiveFontSize(2)}}>
-          Track
+      <Pressable onPress={GoToTrackingPage} style={[styles.trackBtn,{backgroundColor: tracking? colors.green: colors.orange}]}>
+        <Text style={{color: colors.white, fontSize: responsiveFontSize(2)}}>
+          {tracking? 'Track': 'No Tracking Available'}
         </Text>
       </Pressable>
 
@@ -138,7 +177,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: responsiveHeight(2),
-    width: responsiveWidth(35),
+    width: responsiveWidth(60),
     height: responsiveHeight(6),
     borderRadius: 50,
     backgroundColor: 'orange',

@@ -75,56 +75,6 @@ function App() {
 
 
 
-  useEffect(() => {
-    // getDeviceToken()
-  }, [])
-
-  // const getDeviceToken = async () => {
-
-  //   await messaging().registerDeviceForRemoteMessages();
-  //   const token = await messaging().getToken();
-  //   let serverKey = 'AAAADz1-KfI:APA91bGJ-sKa3F15DexhEXHxHp_XWl4dEoC6HChxD6cJF42ad9RzvTj0K0KfxwCLLeAA54nWSGHwxN8ZYd2EIbBHztsXGu57ZG7jt-QKT8peIQYvyhMEWj03oX1kO2I0AYR8KVbs09gO'
-  //   let dvT = 'c8KHnyMrRTyXNXB9tVglFM:APA91bGVoYH4vYpKUsETdY_RxbAMZ3vXe2u4wLWhDFrya87IyuTyyStgiaypiOCfZgO5HLuMSpnIvZ4LL7gcFzWfk5_zZbT-hodd-D6RMvtkJPKaSIytPKowKcI5HgO3viZWtHFNBlOX'
-  // }
-
-
-
-  // useEffect(() => {
-
-
-  //   const unsubscribe = messaging().onMessage(async remoteMessage => {
-  //     PushNotification.localNotification({
-  //       ticker: "My Notification Ticker",
-  //       channelId: "test-channel",
-  //       channelName: "Test Channel",
-  //       // title: remoteMessage.notification?.title,
-  //       title: remoteMessage.notification?.title,
-  //       // message: remoteMessage.notification?.body,
-  //       message: remoteMessage.notification?.body,
-  //       // bigText: "Yuhu is name of the famous chinese dish",
-  //       // foreground: true,
-  //       showWhen: true,
-  //       color: 'red'
-  //     })
-  //   });
-
-  //   return unsubscribe;
-  // }, []);
-
-
-  const config = {
-    animation: 'spring',
-    config: {
-      stiffness: 1000,
-      damping: 500,
-      mass: 3,
-      overshootClamping: true,
-      restDisplacementThreshold: 0.01,
-      restSpeedThreshold: 0.01,
-    },
-  };
-
-
   return (
     <>
 

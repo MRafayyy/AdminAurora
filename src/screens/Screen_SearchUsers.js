@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useContext, useCallback} from 'react';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
 
 import {
   View,
@@ -10,31 +10,36 @@ import {
   refreshing,
   TextInput,
   Image,
+  Text,
 } from 'react-native';
 
-// import EncryptedStorage from 'react-native-encrypted-storage'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {
   responsiveHeight,
   responsiveWidth,
   responsiveFontSize,
 } from 'react-native-responsive-dimensions';
-// import * as Keychain from 'react-native-keychain';
+
 import ip from './IPaddress';
 
 import UserDisplay from '../components/UserDisplay';
 import socket from '../components/SocketServiceAdmin';
-// import UserIdContext from "../UserIdContext";
+import fontFamily from '../../assets/fontFamily/fontFamily';
+import GlobalStyles from '../utils/GlobalStyles';
+import colors from '../utils/color';
 
-export default function Screen_SearchUsers({navigation}) {
-  // const navigation = useNavigation();
+
+export default function Screen_SearchUsers({ navigation }) {
+
   const [searchText, setSearchText] = useState('');
   const [onlineUsersCount, setOnlineUsersCount] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
 
   const [AllUsers, setAllUsers] = useState([]);
   const [AllUsers2, setAllUsers2] = useState([]);
-  const [requestSent, setrequestSent] = useState({});
+
 
   const fetchUsers = async () => {
     try {
@@ -67,16 +72,6 @@ export default function Screen_SearchUsers({navigation}) {
       socket.off('aUserGotOffline');
     };
   }, []);
-
-  // useEffect(() => {
-  //   socket.on('aUserGotOffline', () => {
-  //     fetchUsers();
-  //   });
-
-  //   return () => {
-  //     socket.off('aUserGotffline');
-  //   };
-  // }, []);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', e => {
@@ -120,53 +115,48 @@ export default function Screen_SearchUsers({navigation}) {
   const onSearch = text => {
     const searchText = text.trim().toLowerCase();
 
-    // Debugging: Log the search text
-    // console.log("Search text:", searchText);
 
     if (searchText === '') {
-      // If the search text is empty, reset to the original list
+
       setAllUsers(AllUsers2);
     } else {
       let tempList = AllUsers2.filter(item => {
         if (item.name && typeof item.name === 'string') {
           return item.name.toLowerCase().startsWith(searchText);
-          // return item.name.toLowerCase().includes(searchText);
-          // return (item.name.toLowerCase()).indexOf(text.trim().toLowerCase()) > -1;
+  
         }
         return false;
       });
 
-      // Debugging: Log the filtered list
-      // console.log("Filtered list:", tempList);
 
       setAllUsers(tempList);
     }
-    // ------------------------------------
 
-    // let tempList = AllUsers.filter((item)=>{
-    //     const searchText = text.trim().toLowerCase();
-    //     // if(item.name!==undefined){
-
-    //         // return (item.name.toLowerCase()).indexOf(text.trim().toLowerCase()) > -1;
-    //         if (item.name && typeof item.name === 'string') {
-    //     return item.name.toLowerCase().includes(searchText);
-    // }
-    //     // }
-    // })
-    // setAllUsers(tempList)
-
-    // if(text.trim()===''){
-    //     setAllUsers(AllUsers2)
-    // }
   };
 
-  // const GoToInfoPage = (details) =>{
-  //   navigation.navigate('Screen_UsersInfo', {details})
-  // }
+
 
   return (
     <>
       <View style={styles.body}>
+
+
+      <View style={styles.headerContainer}>
+    
+    <Text style={[styles.text, {fontSize: responsiveFontSize(2.5)}]}>Women Users</Text>
+
+          <MaterialCommunityIcons
+            name="contacts"
+            // name="chatbox-ellipses"
+            size={30}
+            color={colors.blue}
+            onPress={() => navigation.navigate('Search_AppContacts')}
+          />
+  
+
+        </View>
+
+
         <View
           style={{
             justifyContent: 'center',
@@ -176,7 +166,7 @@ export default function Screen_SearchUsers({navigation}) {
           <Pressable
             style={{
               flexDirection: 'row',
-              justifyContent: 'flex-start',
+              // justifyContent: 'flex-start',
               alignItems: 'center',
               width: responsiveWidth(89),
               height: responsiveHeight(6),
@@ -194,7 +184,7 @@ export default function Screen_SearchUsers({navigation}) {
               }}
             />
             <TextInput
-              style={{color: 'black', fontSize: responsiveFontSize(2)}}
+              style={[GlobalStyles.textInputInsideHomeScreens]}
               value={searchText}
               onChangeText={text => {
                 handleOnChangeText(text);
@@ -204,7 +194,6 @@ export default function Screen_SearchUsers({navigation}) {
           </Pressable>
         </View>
 
-        {/* <View style={{ justifyContent: 'center', alignItems: 'center',width: responsiveWidth(95) }}> */}
 
         {
           <FlatList
@@ -216,16 +205,16 @@ export default function Screen_SearchUsers({navigation}) {
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
             data={AllUsers}
-            renderItem={({item}) => {
+            renderItem={({ item }) => {
               return <UserDisplay item={item} navigation={navigation} />;
             }}
             keyExtractor={(item, index) => index}
           />
         }
-        {/* </View> */}
+ 
       </View>
 
-      {/* </ScrollView> */}
+    
     </>
   );
 }
@@ -234,16 +223,24 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
     backgroundColor: 'white',
-
-    // alignItems: 'center',
-    // justifyContent: 'flex-start'
   },
+
   text: {
+    fontFamily: fontFamily.Regular,
     margin: 5,
     fontSize: 15,
-    // fontWeight: '600',
     color: 'black',
     textAlign: 'left',
+  },
+  headerContainer: {
+    marginTop: responsiveHeight(2),
+    // alignSelf: 'flex-end',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: responsiveWidth(7),
+    paddingHorizontal: responsiveWidth(6),
+    paddingRight: responsiveWidth(6),
   },
 
   UsernameInputBox: {

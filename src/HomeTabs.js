@@ -16,7 +16,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import UserIdContext from './UserIdContext';
-import Screen_Maps from './screens/SearchUserScreens/Screen_Maps';
+import Screen_Maps from './screens/SearchUserScreens/Screen_Maps2';
 import SearchTabs from './SearchStackTabs';
 import SearchStackTabs from './SearchStackTabs';
 
