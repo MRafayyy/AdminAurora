@@ -1,5 +1,5 @@
-import {View, Text, StyleSheet, Pressable, TextInput, KeyboardAvoidingView} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import { View, Text, StyleSheet, Pressable, TextInput, KeyboardAvoidingView, Alert, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import {
   responsiveFontSize,
   responsiveHeight,
@@ -7,52 +7,66 @@ import {
 } from 'react-native-responsive-dimensions';
 import ip from '../IPaddress';
 import colors from '../../utils/color';
+import InfoField from '../../components/InfoField';
 
-export default function Screen_UsersInfo({navigation, route}) {
+export default function Screen_UsersInfo({ navigation, route }) {
 
+  const item = route.params.item;
   const [TitleText, setTitleText] = useState('');
   const [MessageText, setMessageText] = useState('');
   const [Loader, setLoader] = useState(false);
-  const item = route.params.item;
-
 
   const [tracking, setTracking] = useState(false);
   const [receivedLocation, setReceivedLocation] = useState();
 
   const getRescueStatus = async () => {
-    let response = await fetch(`${ip}/getRescueButtonStatus/${item._id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
 
-    response = await response.json();
+    try {
 
-    if (response.status === true) {
-      setTracking(true);
-      setReceivedLocation(response.location);
+
+
+      let response = await fetch(`${ip}/getRescueButtonStatus/${item._id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      response = await response.json();
+
+      if (response.status === true) {
+        console.log("what")
+        setTracking(true);
+        setReceivedLocation(response.location);
+      }
+
+
+    } catch (error) {
+      console.log(error)
     }
   };
 
   useEffect(() => {
-    getRescueStatus();
+    const execute = () => {
+      getRescueStatus();
+    }
+    execute()
   }, []);
 
-  console.log(item._id)
-  // console.log(item.is_online)
+
+
   const GoToTrackingPage = () => {
     navigation.navigate('Screen_Maps', {
       item: item._id,
       receivedLocation: receivedLocation,
     });
   };
-
-
-
-
-
-
+ 
+  const GoToHistoryPage = () => {
+    navigation.navigate('Screen_RescueBtnHistory', {
+      item: item.rescueButtonHistory,
+    });
+  };
 
 
   const sendNotif = async () => {
@@ -72,7 +86,7 @@ export default function Screen_UsersInfo({navigation, route}) {
         setLoader(false)
         let response = await fetch(url, {
           method: 'POST',
-          headers: {'Content-Type': 'application/json'},
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
         });
         response = await response.json();
@@ -86,25 +100,35 @@ export default function Screen_UsersInfo({navigation, route}) {
   return (
     <KeyboardAvoidingView enabled behavior={Platform.OS === 'ios' ? 'padding' : 'null'} style={{ flex: 1 }} >
 
-    <View style={styles.container}>
-      
-      <View style={styles.fieldContainer}>
-        <Text style={styles.fieldLabel}>Name</Text>
-        <Text style={styles.fieldValue}>{item.name}</Text>
-      </View>
-      <View style={styles.fieldContainer}>
-        <Text style={styles.fieldLabel}>Email </Text>
-        <Text style={styles.fieldValue}>{item.email}</Text>
-      </View>
+      <ScrollView contentContainerStyle={styles.container}>
 
-      <Pressable onPress={GoToTrackingPage} style={[styles.trackBtn,{backgroundColor: tracking? colors.green: colors.orange}]}>
-        <Text style={{color: colors.white, fontSize: responsiveFontSize(2)}}>
-          {tracking? 'Track': 'No Tracking Available'}
-        </Text>
-      </Pressable>
+        <InfoField fieldName={'Name'} fieldValue={item.name} />
+        <InfoField fieldName={'Email'} fieldValue={item.email} />
+        {
+          item.currentRescueButtonStatus !== null &&
 
-      <View style={styles.notifContainer}>
-        {/* <Text
+          <InfoField fieldName={'Rescue Status'} fieldValue={item?.currentRescueButtonStatus?.toString()} />
+        }
+
+        <InfoField fieldName={'Name'} fieldValue={item.name} />
+
+        <Pressable disabled={!tracking} onPress={GoToTrackingPage} style={[styles.trackBtn, { backgroundColor: tracking ? colors.green : colors.orange }]}>
+          <Text style={{ color: colors.white, fontSize: responsiveFontSize(2) }}>
+            {tracking ? 'Track' : 'No Tracking Available'}
+          </Text>
+        </Pressable>
+
+        {
+        // item.rescueButtonHistory.length!==0 &&
+        <Pressable onPress={GoToHistoryPage} style={[styles.trackBtn, { backgroundColor: tracking ? colors.green : colors.orange }]}>
+          <Text style={{ color: colors.white, fontSize: responsiveFontSize(2) }}>
+            {item.rescueButtonHistory.length===0?'No History Available': 'Rescue Button History'}
+          </Text>
+        </Pressable>
+        }
+
+        <View style={styles.notifContainer}>
+          {/* <Text
           style={{
             textAlign: 'center',
             color: 'black',
@@ -113,36 +137,36 @@ export default function Screen_UsersInfo({navigation, route}) {
           }}>
           Send notifications to user
         </Text> */}
-        <TextInput
-          onChangeText={value => setTitleText(value)}
-          value={TitleText}
-          style={styles.inputBox}
-          placeholderTextColor={'grey'}
-          placeholder="notification title"
-        />
-        <TextInput
-          onChangeText={value => setMessageText(value)}
-          value={MessageText}
-          style={styles.inputBox}
-          placeholderTextColor={'grey'}
-          placeholder="notification body"
+          <TextInput
+            onChangeText={value => setTitleText(value)}
+            value={TitleText}
+            style={styles.inputBox}
+            placeholderTextColor={'grey'}
+            placeholder="notification title"
           />
-        <Pressable
-          disabled={Loader}
-          onPress={sendNotif}
-          style={styles.notifBtn}>
-          <Text style={{fontSize: responsiveFontSize(2), color: 'black'}}>
-            Send Notification
-          </Text>
-        </Pressable>
-      </View>
-    </View>
-</KeyboardAvoidingView>
+          <TextInput
+            onChangeText={value => setMessageText(value)}
+            value={MessageText}
+            style={styles.inputBox}
+            placeholderTextColor={'grey'}
+            placeholder="notification body"
+          />
+          <Pressable
+            disabled={Loader}
+            onPress={sendNotif}
+            style={styles.notifBtn}>
+            <Text style={{ fontSize: responsiveFontSize(2), color: 'black' }}>
+              Send Notification
+            </Text>
+          </Pressable>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 const styles = StyleSheet.create({
   container: {
-    flex: 1, 
+   // flex: 1,
     paddingHorizontal: responsiveWidth(4),
     justifyContent: 'flex-start',
     // marginHorizontal: responsiveWidth(12),
