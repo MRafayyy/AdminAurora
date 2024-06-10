@@ -12,13 +12,13 @@ import ip from '../screens/IPaddress';
 import colors from '../utils/color';
 import fontFamily from '../../assets/fontFamily/fontFamily';
 
-const UserDisplay = ({item, navigation}) => {
+const UserDisplay = ({item, navigation, screen}) => {
   const [disableNow, setdisableNow] = useState(false);
 
   // const [requestSent, setrequestSent] = useState({sel: false})
 
 const GoToInfoPage = () =>{
-    navigation.navigate('Screen_UsersInfo', {item: item})
+    navigation.navigate(screen, {item: item})
   }
 
   return (

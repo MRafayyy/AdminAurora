@@ -14,6 +14,7 @@ import Search_AppContacts from "./screens/Search_AppContacts";
 import fontFamily from "../assets/fontFamily/fontFamily";
 import colors from "./utils/color";
 import RescueBtnHistory from "./screens/SearchUserScreens/RescueBtnHistory";
+import Screen_ContactsInfo from "./screens/Screen_ContactsInfo";
 
 const Stack = createStackNavigator()
 
@@ -60,6 +61,11 @@ export default function SearchStackTabs() {
 
                 }} />
 
+                <Stack.Screen name="Screen_ContactsInfo" component={Screen_ContactsInfo} options={{
+                    headerShown: true,
+                    headerTitle: 'Contact Information'
+                }} />
+                
                 <Stack.Screen name="Screen_UsersInfo" component={Screen_UsersInfo} options={{
                     headerShown: true,
                     headerTitle: 'User Information'

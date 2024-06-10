@@ -153,7 +153,7 @@ export default function Search_AppContacts({ navigation }) {
                     />
 
 
-                    <Text style={[styles.text, { fontSize: responsiveFontSize(2.5),lineHeight: responsiveHeight(3.3) }]}>Contact Users</Text>
+                    <Text style={[styles.text, { fontSize: responsiveFontSize(2.5), lineHeight: responsiveHeight(3.3) }]}>Contact Users</Text>
 
 
                 </View>
@@ -208,7 +208,7 @@ export default function Search_AppContacts({ navigation }) {
                         }
                         data={AllUsers}
                         renderItem={({ item }) => {
-                            return <UserDisplay item={item} navigation={navigation} />;
+                            return <UserDisplay screen={'Screen_ContactsInfo'} item={item} navigation={navigation} />;
                         }}
                         keyExtractor={(item, index) => index}
                     />

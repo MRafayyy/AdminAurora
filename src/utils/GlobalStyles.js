@@ -24,8 +24,10 @@ export default StyleSheet.create({
     },
     
     textInputInsideHomeScreens:{
+      width: '100%',
       fontSize: responsiveFontSize(2),
-      color: 'black',
+      lineHeight: responsiveHeight(2.5),
+      color: colors.black,
       fontFamily: fontFamily.Regular,
       textAlignVertical: 'center',
       verticalAlign: 'middle',

@@ -206,7 +206,7 @@ export default function Screen_SearchUsers({ navigation }) {
             }
             data={AllUsers}
             renderItem={({ item }) => {
-              return <UserDisplay item={item} navigation={navigation} />;
+              return <UserDisplay screen={'Screen_UsersInfo'} item={item} navigation={navigation} />;
             }}
             keyExtractor={(item, index) => index}
           />

@@ -147,14 +147,14 @@ export default function Screen_UsersInfo({ navigation, route }) {
             onChangeText={value => setTitleText(value)}
             value={TitleText}
             style={styles.inputBox}
-            placeholderTextColor={'grey'}
+            placeholderTextColor={colors.darksilver}
             placeholder="notification title"
           />
           <TextInput
             onChangeText={value => setMessageText(value)}
             value={MessageText}
             style={styles.inputBox}
-            placeholderTextColor={'grey'}
+            placeholderTextColor={colors.darksilver}
             placeholder="notification body"
           />
      
@@ -235,12 +235,14 @@ const styles = StyleSheet.create({
     width: responsiveWidth(80),
     height: responsiveHeight(7),
     fontSize: responsiveFontSize(2),
-    color: 'black',
+    color: colors.black,
     borderColor: 'grey',
     paddingVertical: responsiveHeight(2),
     paddingHorizontal: responsiveWidth(6),
-    borderRadius: 20,
+    borderRadius: 10,
     borderWidth: 2,
+    fontFamily: fontFamily.Regular,
+    lineHeight: responsiveHeight(2.5)
   },
 
   notifContainer: {

@@ -13,21 +13,26 @@ import {
     BackHandler,
     ActivityIndicator,
     Keyboard,
-    KeyboardAvoidingView
+    KeyboardAvoidingView,
+    ScrollView
 } from 'react-native';
-import { responsiveFontSize, responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
-
-// import PushNotification from "react-native-push-notification";
-// import messaging from '@react-native-firebase/messaging'
-
-// import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as Keychain from 'react-native-keychain';
-
 import ip from './IPaddress';
+import colors from '../utils/color';
+import InfoField from '../components/InfoField';
+import fontFamily from '../../assets/fontFamily/fontFamily';
+import { responsiveFontSize, responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
+import { Colors } from "react-native/Libraries/NewAppScreen";
 
 export default function Screen_FirebaseNotif({ navigation, route }) {
 
+    const [TitleText, setTitleText] = useState('');
+    const [MessageText, setMessageText] = useState('');
     const [Loader, setLoader] = useState(false);
+
+
+
+
+
     function handleBackButtonClick() {
         navigation.navigate('Screen_Home');
         return true;
@@ -39,23 +44,6 @@ export default function Screen_FirebaseNotif({ navigation, route }) {
             BackHandler.removeEventListener("hardwareBackPress", handleBackButtonClick);
         };
     }, []);
-
-    const [TitleText, setTitleText] = useState('');
-    const [MessageText, setMessageText] = useState('');
-
-    const onHandleTitleChange = (value) => {
-        setTitleText(value);
-
-    }
-    const onHandleMessageChange = (value) => {
-        setMessageText(value);
-    }
-
-    const GoToHomePage = () => {
-        navigation.navigate('Screen_Home')
-    }
-
-    // useEffect(() => {
 
 
 
@@ -81,88 +69,67 @@ export default function Screen_FirebaseNotif({ navigation, route }) {
                     },
                     body: JSON.stringify(notifData)
                 })
-                // response = response.json();
-                // console.log(response)
+
             }
         } catch (error) {
             setLoader(false)
 
         }
-
-        //     try {
-
-
-        //         // POST https://fcm.googleapis.com/v1/projects/myproject-b5ae1/messages:send HTTP/1.1
-        //         let url = 'https://fcm.googleapis.com/fcm/send'
-        //         let response = await fetch(url, {
-        //             method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //             'Authorization': 'Bearer AAAADz1-KfI:APA91bGJ-sKa3F15DexhEXHxHp_XWl4dEoC6HChxD6cJF42ad9RzvTj0K0KfxwCLLeAA54nWSGHwxN8ZYd2EIbBHztsXGu57ZG7jt-QKT8peIQYvyhMEWj03oX1kO2I0AYR8KVbs09gO'
-        //         },
-        //         body: JSON.stringify({
-
-        //             "data": {},
-        //             "notification": {
-        //                 "body": "This is an FCM notification message!",
-        //                 "title": "FCM Message"
-        //             },
-        //             "to": "c8KHnyMrRTyXNXB9tVglFM:APA91bGVoYH4vYpKUsETdY_RxbAMZ3vXe2u4wLWhDFrya87IyuTyyStgiaypiOCfZgO5HLuMSpnIvZ4LL7gcFzWfk5_zZbT-hodd-D6RMvtkJPKaSIytPKowKcI5HgO3viZWtHFNBlOX",
-        //         }
-
-        //         )
-        //     })
-        //     response  = response.json()
-        // } catch (error) {
-        //     console.log(error)
-        // }
-
     }
 
 
 
 
-
-
-
-
-
-    useEffect(() => {
-
-
-    }, [])
-
-
     return (
         <>
-            <KeyboardAvoidingView enabled behavior={Platform.OS === 'ios' ? 'padding' : 'null'} style={{ flex: 1 }} >
+            <KeyboardAvoidingView
+                enabled
+                behavior={Platform.OS === 'ios' ? 'padding' : 'null'}
+                style={{ flex: 1, backgroundColor: colors.white }}>
+                <ScrollView contentContainerStyle={styles.container}>
 
-                <View style={styles.body}>
+                    <View style={styles.notifContainer}>
 
-                    <Text style={styles.welcome_text}>Firebase notifications</Text>
+                        <Text
+                            style={{
+                                fontFamily: fontFamily.SemiBold,
+                                fontSize: responsiveFontSize(6),
+                                color: colors.blue,
+                                marginBottom: responsiveHeight(10)
+                            }}
+                        >Notifications</Text>
 
-                    <View style={styles.UsernameInputBoxView}>
 
-                        <TextInput onChangeText={(value) => onHandleTitleChange(value)} style={[styles.UsernameInputBox, { color: 'black' }]} editable onSubmitEditing={Keyboard.dismiss} placeholder='Title' placeholderTextColor={'black'} ></TextInput>
+                        <TextInput
+                            onChangeText={value => setTitleText(value)}
+                            value={TitleText}
+                            style={styles.inputBox}
+                            placeholderTextColor={colors.darksilver}
+                            placeholder="notification title"
+                        />
+                        <TextInput
+                            onChangeText={value => setMessageText(value)}
+                            value={MessageText}
+                            style={styles.inputBox}
+                            placeholderTextColor={colors.darksilver}
+                            placeholder="notification body"
+                        />
+
+
+                        <Pressable
+                            disabled={Loader}
+                            onPress={sendFCMNotifs}
+                            style={[
+                                styles.trackBtn,
+                                { backgroundColor: colors.orange },
+                            ]}>
+                            <Text style={styles.text}>
+                                Send Notification
+                            </Text>
+                        </Pressable>
                     </View>
-
-                    <View style={styles.PasswordInputBoxView}>
-
-                        <TextInput onChangeText={(value) => onHandleMessageChange(value)} style={[styles.PasswordInputBox, { color: 'black' }]} editable onSubmitEditing={Keyboard.dismiss} disabled={Loader} placeholder='Message' placeholderTextColor={'black'} ></TextInput>
-                    </View>
-
-
-
-
-                    <Pressable onPress={() => { sendFCMNotifs() }
-                    } disabled={Loader} style={({ pressed }) => [pressed ? { opacity: 0.8 } : {}, { width: '80%', height: 55, backgroundColor: '#0662bf', borderWidth: 1, marginTop: responsiveHeight(1), borderRadius: 10, alignSelf: 'center', justifyContent: 'center' }]}>{Loader ? <ActivityIndicator size='large' color="#fff" /> : <Text style={{ fontSize: responsiveFontSize(2.2), color: 'white', textAlign: 'center' }}>Send notification</Text>}</Pressable>
-
-
-
-
-
-            </View>
-        </KeyboardAvoidingView >
+                </ScrollView>
+            </KeyboardAvoidingView>
         </>
     )
 }
@@ -171,99 +138,85 @@ export default function Screen_FirebaseNotif({ navigation, route }) {
 
 
 const styles = StyleSheet.create({
-    body: {
-        flex: 1,
-        backgroundColor: 'white',
-        alignItems: 'center',
-        justifyContent: 'flex-start'
-    },
-
-    welcome_text: {
-
-        fontSize: responsiveFontSize(5),
-        marginTop: responsiveHeight(12),
-        marginBottom: responsiveHeight(12),
-        fontWeight: '900',
-        fontStyle: 'normal',
-        color: 'gray'
-    },
-    text: {
-
-        margin: 0,
-        // fontSize: 15,
-        fontWeight: '500',
-        color: 'black',
-        textAlign: 'left'
-    },
-
-    linkbeforetext: {
-        margin: 0,
-        fontSize: 20,
-        fontWeight: '600',
-        color: 'black',
-        textAlign: 'left'
-    },
-
-    btntext: {
-        margin: '4%',
-        fontSize: 20,
-        fontWeight: '600',
-        color: 'white',
-        textAlign: 'left'
-    },
-    UsernameInputBoxView: {
-        marginBottom: responsiveHeight(10),
-
-
-    },
-    PasswordInputBoxView: {
-
-        marginBottom: responsiveHeight(10),
-
-    },
-    UsernameInputBox: {
-        width: 300,
-        height: 50,
-        fontSize: 20,
-        backgroundColor: 'white',
-        color: 'black',
-        borderColor: 'black',
-        borderTopWidth: 0,
-        borderRightWidth: 0,
-        borderLeftWidth: 0,
-        borderBottomWidth: 5,
-    },
-    PasswordInputBox: {
-        width: 300,
-        height: 50,
-        fontSize: 20,
-        backgroundColor: 'white',
-        color: 'black',
-        borderColor: 'black',
-        borderTopWidth: 0,
-        borderRightWidth: 0,
-        borderLeftWidth: 0,
-        borderBottomWidth: 5,
-        marginBottom: 4,
-    },
-    loginBtn: {
+    container: {
         // flex: 1,
-        width: 300,
-        height: 100,
-        color: 'white',
-        // borderRadius: 200,
-        borderTopEndRadius: 100,
-        borderBottomLeftRadius: 100,
-
-        // justifyContent: 'center',
-        // alignItems: 'center'
-        marginTop: '7',
-        // marginBottom: '100'
+        paddingHorizontal: responsiveWidth(4),
+        justifyContent: 'flex-start',
+        // marginHorizontal: responsiveWidth(12),
+        paddingTop: responsiveHeight(4),
+        alignItems: 'center',
+        backgroundColor: 'white',
     },
-    LG: {
-        borderRadius: 200,
+    fieldContainer: {
+        width: responsiveWidth(85),
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
+        gap: responsiveWidth(10),
+        marginBottom: 20,
+        paddingRight: responsiveWidth(5),
+    },
+    fieldLabel: {
+        fontSize: responsiveFontSize(2),
+        fontFamily: fontFamily.Bold,
+        color: colors.black,
+        textAlign: 'center',
+        //   marginBottom: 5,
+    },
+    fieldValue: {
+        paddingRight: responsiveWidth(10),
+        color: colors.black,
+        fontFamily: fontFamily.Regular,
+        textAlign: 'center',
+        fontSize: responsiveFontSize(2),
     },
 
+    trackBtn: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: responsiveHeight(2),
+        width: responsiveWidth(60),
+        height: responsiveHeight(6),
+        borderRadius: 50,
+        backgroundColor: 'orange',
+    },
+    notifBtn: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontSize: responsiveFontSize(2),
+        marginTop: responsiveHeight(2),
+        width: responsiveWidth(60),
+        height: responsiveHeight(6),
+        borderRadius: 50,
+        backgroundColor: 'orange',
+    },
 
+    inputBox: {
+        // backgroundColor: 'lightgrey',
+        margin: responsiveHeight(2),
+        width: responsiveWidth(80),
+        height: responsiveHeight(7),
+        fontSize: responsiveFontSize(2),
+        color: colors.black,
+        borderColor: 'grey',
+        paddingVertical: responsiveHeight(2),
+        paddingHorizontal: responsiveWidth(6),
+        borderRadius: 10,
+        borderWidth: 2,
+        fontFamily: fontFamily.Regular,
+        lineHeight: responsiveHeight(2.5)
+    },
 
+    notifContainer: {
+        marginTop: responsiveHeight(10),
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    text: {
+        color: colors.white,
+        fontSize: responsiveFontSize(2),
+        fontFamily: fontFamily.Regular,
+        lineHeight: responsiveHeight(2.7)
+    },
 });
