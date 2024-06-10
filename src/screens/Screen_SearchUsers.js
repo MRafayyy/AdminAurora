@@ -123,7 +123,7 @@ export default function Screen_SearchUsers({ navigation }) {
       let tempList = AllUsers2.filter(item => {
         if (item.name && typeof item.name === 'string') {
           return item.name.toLowerCase().startsWith(searchText);
-  
+
         }
         return false;
       });
@@ -141,9 +141,9 @@ export default function Screen_SearchUsers({ navigation }) {
       <View style={styles.body}>
 
 
-      <View style={styles.headerContainer}>
-    
-    <Text style={[styles.text, {fontSize: responsiveFontSize(2.5)}]}>Women Users</Text>
+        <View style={styles.headerContainer}>
+
+          <Text style={[styles.text, { fontSize: responsiveFontSize(2.5) }]}>Women Users</Text>
 
           <MaterialCommunityIcons
             name="contacts"
@@ -152,7 +152,7 @@ export default function Screen_SearchUsers({ navigation }) {
             color={colors.blue}
             onPress={() => navigation.navigate('Search_AppContacts')}
           />
-  
+
 
         </View>
 
@@ -211,10 +211,10 @@ export default function Screen_SearchUsers({ navigation }) {
             keyExtractor={(item, index) => index}
           />
         }
- 
+
       </View>
 
-    
+
     </>
   );
 }
@@ -222,14 +222,14 @@ export default function Screen_SearchUsers({ navigation }) {
 const styles = StyleSheet.create({
   body: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: colors.white,
   },
 
   text: {
     fontFamily: fontFamily.Regular,
     margin: 5,
     fontSize: 15,
-    color: 'black',
+    color: colors.black,
     textAlign: 'left',
   },
   headerContainer: {

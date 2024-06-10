@@ -1,4 +1,13 @@
-import { View, Text, StyleSheet, Pressable, TextInput, KeyboardAvoidingView, Alert, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  TextInput,
+  KeyboardAvoidingView,
+  Alert,
+  ScrollView,
+} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import {
   responsiveFontSize,
@@ -8,9 +17,9 @@ import {
 import ip from '../IPaddress';
 import colors from '../../utils/color';
 import InfoField from '../../components/InfoField';
+import fontFamily from '../../../assets/fontFamily/fontFamily';
 
 export default function Screen_UsersInfo({ navigation, route }) {
-
   const item = route.params.item;
   const [TitleText, setTitleText] = useState('');
   const [MessageText, setMessageText] = useState('');
@@ -20,11 +29,7 @@ export default function Screen_UsersInfo({ navigation, route }) {
   const [receivedLocation, setReceivedLocation] = useState();
 
   const getRescueStatus = async () => {
-
     try {
-
-
-
       let response = await fetch(`${ip}/getRescueButtonStatus/${item._id}`, {
         method: 'GET',
         headers: {
@@ -35,25 +40,21 @@ export default function Screen_UsersInfo({ navigation, route }) {
       response = await response.json();
 
       if (response.status === true) {
-        console.log("what")
+        console.log('what');
         setTracking(true);
         setReceivedLocation(response.location);
       }
-
-
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
   useEffect(() => {
     const execute = () => {
       getRescueStatus();
-    }
-    execute()
+    };
+    execute();
   }, []);
-
-
 
   const GoToTrackingPage = () => {
     navigation.navigate('Screen_Maps', {
@@ -61,18 +62,17 @@ export default function Screen_UsersInfo({ navigation, route }) {
       receivedLocation: receivedLocation,
     });
   };
- 
+
   const GoToHistoryPage = () => {
     navigation.navigate('Screen_RescueBtnHistory', {
       item: item.rescueButtonHistory,
     });
   };
 
-
   const sendNotif = async () => {
-    setLoader(true)
+    setLoader(true);
     try {
-      const url = `${ip}/sendToOne/${item._id}`;
+      const url = `${ip}/sendToOneWomen/${item._id}`;
 
       if (TitleText.length === 0 || MessageText.length === 0) {
         Alert.alert('Empty fields');
@@ -82,8 +82,8 @@ export default function Screen_UsersInfo({ navigation, route }) {
           title: TitleText.trim(),
           body: MessageText.trim(),
         };
-        Alert.alert("Success", "Notification was sent to all users")
-        setLoader(false)
+        Alert.alert('Success', 'Notification was sent to the user');
+        setLoader(false);
         let response = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -96,47 +96,53 @@ export default function Screen_UsersInfo({ navigation, route }) {
     }
   };
 
-
   return (
-    <KeyboardAvoidingView enabled behavior={Platform.OS === 'ios' ? 'padding' : 'null'} style={{ flex: 1 }} >
-
+    <KeyboardAvoidingView
+      enabled
+      behavior={Platform.OS === 'ios' ? 'padding' : 'null'}
+      style={{ flex: 1, backgroundColor: colors.white }}>
       <ScrollView contentContainerStyle={styles.container}>
+        <InfoField fieldName={'Name'} fieldValue={item.name} />
+        <InfoField  fieldName={'Email'} fieldValue={item.email} />
+        {item.currentRescueButtonStatus !== null && (
+          <InfoField
+            fieldName={'Rescue Status'}
+            fieldValue={item?.currentRescueButtonStatus?.toString()}
+          />
+        )}
 
         <InfoField fieldName={'Name'} fieldValue={item.name} />
-        <InfoField fieldName={'Email'} fieldValue={item.email} />
-        {
-          item.currentRescueButtonStatus !== null &&
 
-          <InfoField fieldName={'Rescue Status'} fieldValue={item?.currentRescueButtonStatus?.toString()} />
-        }
-
-        <InfoField fieldName={'Name'} fieldValue={item.name} />
-
-        <Pressable disabled={!tracking} onPress={GoToTrackingPage} style={[styles.trackBtn, { backgroundColor: tracking ? colors.green : colors.orange }]}>
-          <Text style={{ color: colors.white, fontSize: responsiveFontSize(2) }}>
+        <Pressable
+          disabled={!tracking}
+          onPress={GoToTrackingPage}
+          style={[
+            styles.trackBtn,
+            { backgroundColor: tracking ? colors.green : colors.orange },
+          ]}>
+          <Text style={styles.text}>
             {tracking ? 'Track' : 'No Tracking Available'}
           </Text>
         </Pressable>
 
         {
-        // item.rescueButtonHistory.length!==0 &&
-        <Pressable onPress={GoToHistoryPage} style={[styles.trackBtn, { backgroundColor: tracking ? colors.green : colors.orange }]}>
-          <Text style={{ color: colors.white, fontSize: responsiveFontSize(2) }}>
-            {item.rescueButtonHistory.length===0?'No History Available': 'Rescue Button History'}
-          </Text>
-        </Pressable>
+          // item.rescueButtonHistory.length!==0 &&
+          <Pressable
+            onPress={GoToHistoryPage}
+            style={[
+              styles.trackBtn,
+              { backgroundColor: item.rescueButtonHistory.length === 0 ? colors.orange : colors.green },
+            ]}>
+            <Text
+              style={styles.text}>
+              {item.rescueButtonHistory.length === 0
+                ? 'No History Available'
+                : 'Rescue Button History'}
+            </Text>
+          </Pressable>
         }
 
         <View style={styles.notifContainer}>
-          {/* <Text
-          style={{
-            textAlign: 'center',
-            color: 'black',
-            fontSize: responsiveFontSize(2.3),
-            fontWeight: '900'
-          }}>
-          Send notifications to user
-        </Text> */}
           <TextInput
             onChangeText={value => setTitleText(value)}
             value={TitleText}
@@ -151,14 +157,19 @@ export default function Screen_UsersInfo({ navigation, route }) {
             placeholderTextColor={'grey'}
             placeholder="notification body"
           />
+     
+
           <Pressable
-            disabled={Loader}
-            onPress={sendNotif}
-            style={styles.notifBtn}>
-            <Text style={{ fontSize: responsiveFontSize(2), color: 'black' }}>
-              Send Notification
-            </Text>
-          </Pressable>
+          disabled={Loader}
+          onPress={sendNotif}
+          style={[
+            styles.trackBtn,
+            { backgroundColor: colors.orange },
+          ]}>
+          <Text style={styles.text}>
+          Send Notification
+          </Text>
+        </Pressable>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -166,11 +177,11 @@ export default function Screen_UsersInfo({ navigation, route }) {
 }
 const styles = StyleSheet.create({
   container: {
-   // flex: 1,
+    // flex: 1,
     paddingHorizontal: responsiveWidth(4),
     justifyContent: 'flex-start',
     // marginHorizontal: responsiveWidth(12),
-    paddingTop: responsiveHeight(10),
+    paddingTop: responsiveHeight(4),
     alignItems: 'center',
     backgroundColor: 'white',
   },
@@ -181,18 +192,19 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     gap: responsiveWidth(10),
     marginBottom: 20,
-    paddingRight: responsiveWidth(5)
+    paddingRight: responsiveWidth(5),
   },
   fieldLabel: {
     fontSize: responsiveFontSize(2),
-    fontWeight: 'bold',
-    color: 'black',
+    fontFamily: fontFamily.Bold,
+    color: colors.black,
     textAlign: 'center',
     //   marginBottom: 5,
   },
   fieldValue: {
     paddingRight: responsiveWidth(10),
-    color: 'black',
+    color: colors.black,
+    fontFamily: fontFamily.Regular,
     textAlign: 'center',
     fontSize: responsiveFontSize(2),
   },
@@ -223,7 +235,6 @@ const styles = StyleSheet.create({
     width: responsiveWidth(80),
     height: responsiveHeight(7),
     fontSize: responsiveFontSize(2),
-
     color: 'black',
     borderColor: 'grey',
     paddingVertical: responsiveHeight(2),
@@ -236,5 +247,12 @@ const styles = StyleSheet.create({
     marginTop: responsiveHeight(10),
     justifyContent: 'center',
     alignItems: 'center',
+  },
+
+  text: {
+    color: colors.white,
+    fontSize: responsiveFontSize(2),
+    fontFamily: fontFamily.Regular,
+    lineHeight: responsiveHeight(2.7)
   },
 });

@@ -9,6 +9,8 @@ import {
 } from 'react-native-responsive-dimensions';
 
 import ip from '../screens/IPaddress';
+import colors from '../utils/color';
+import fontFamily from '../../assets/fontFamily/fontFamily';
 
 const UserDisplay = ({item, navigation}) => {
   const [disableNow, setdisableNow] = useState(false);
@@ -41,11 +43,7 @@ const GoToInfoPage = () =>{
 
       <View style={{marginLeft: responsiveWidth(5), flex: 1}}>
         <Text
-          style={{
-            textAlign: 'left',
-            color: 'black',
-            fontSize: responsiveFontSize(2),
-          }}>
+          style={styles.text}>
           {item.name}
         </Text>
         {/* <Text style={{ textAlign: 'left', color: 'gray', fontSize: responsiveFontSize(2) }} >{item.userId}</Text> */}
@@ -76,4 +74,13 @@ const GoToInfoPage = () =>{
 
 export default UserDisplay;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  text:{
+    
+      textAlign: 'left',
+      color: colors.black,
+      fontSize: responsiveFontSize(2),
+      fontFamily: fontFamily.Regular
+    
+  }
+});
