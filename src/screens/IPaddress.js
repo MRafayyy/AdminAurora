@@ -7,6 +7,6 @@
 // const ip = 'http://192.168.0.107:3000';
 // const ip = 'https://aurora-mauve-gamma.vercel.app';
 // const ip = 'http://192.168.10.1:3000'
- const ip = 'http://192.168.0.107:3000'
- //const ip = 'https://backend-aurora-production.up.railway.app';
+ //const ip = 'http://192.168.0.107:3000'
+ const ip = 'https://backend-aurora-production.up.railway.app';
 export default ip;

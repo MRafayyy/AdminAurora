@@ -65,7 +65,7 @@ export default function Screen_UsersInfo({ navigation, route }) {
 
   const GoToHistoryPage = () => {
     navigation.navigate('Screen_RescueBtnHistory', {
-      item: item.rescueButtonHistory,
+      item: item,
     });
   };
 

@@ -13,6 +13,7 @@ import { RefreshControl } from 'react-native';
 export default function RescueBtnHistory({ navigation, route }) {
 
     const [rescueData, setRescueData] = useState(null)
+   // const [currentUserData, setCurrentUserData] = useState(route.params.item.rescueButtonHistory)
     const items = route.params.item;
     const [refreshing, setRefreshing] = useState(false);
 
@@ -22,7 +23,8 @@ const onRefresh =async()=>{
       setRefreshing(false);
     }, 2000);
     try {
-        let response = await fetch(`${ip}/getRescueHistory/${items._id}`, {
+        console.log(items)
+        let response = await fetch(`${ip}/women/getRescueHistory/${items._id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -30,9 +32,10 @@ const onRefresh =async()=>{
         });
   
         response = await response.json();
+        console.log(response)
   
       if(response.ok){
-        setRescueData(response)
+        setRescueData(response.reverse())
       }
       } catch (error) {
         console.log(error);
@@ -52,19 +55,20 @@ const onRefresh =async()=>{
                  refreshControl={
                   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                  }
-                data={rescueData===null? items.reverse(): rescueData}
+                data={rescueData===null? items.rescueButtonHistory.reverse() : rescueData.reverse()}
                 renderItem={({ item }) => {
+                  //  console.log(item.timeWhenSafeButtonPressed)
                     return (
-                        // <Text>{item.timeWhenRescueButtonPressed}</Text>
+                    
 
                         <View style={styles.container}>
 
-                            <InfoField textColor={colors.white} fieldName={'Rescue Press Time'} fieldValue={item.timeWhenRescueButtonPressed} />
-                            <InfoField textColor={colors.white} fieldName={'Date'} fieldValue={item.dateWhenRescueButtonPressed} />
+                            <InfoField textColor={colors.white} fieldName={'Rescue Press Time'} fieldValue={item.timeWhenRescueButtonPressed ===undefined? 'Null' :item.timeWhenRescueButtonPressed} />
+                            <InfoField textColor={colors.white} fieldName={'Date'} fieldValue={item.dateWhenRescueButtonPressed===undefined? 'Null' :  item.dateWhenRescueButtonPressed} />
                             {/* <InfoField fieldName={'locationWhereRescuePressed'} fieldValue={item.locationWhereRescuePressed} /> */}
-                            <InfoField textColor={colors.white} fieldName={'Safe Pressed'} fieldValue={item.safeButtonPressed} />
-                            <InfoField textColor={colors.white} fieldName={'Safe Press Time'} fieldValue={item.timeWhenSafeButtonPressed} />
-                            <InfoField textColor={colors.white} fieldName={'Date'} fieldValue={item.dateWhenSafeButtonPressed} />
+                            <InfoField textColor={colors.white} fieldName={'Safe Pressed'} fieldValue={item.safeButtonPressed===undefined? 'Null' : item.safeButtonPressed} />
+                            <InfoField textColor={colors.white} fieldName={'Safe Press Time'} fieldValue={item.timeWhenSafeButtonPressed===undefined? 'Null' : item.timeWhenSafeButtonPressed} />
+                            <InfoField textColor={colors.white} fieldName={'Date'} fieldValue={item.dateWhenSafeButtonPressed ===undefined? 'Null' : item.dateWhenSafeButtonPressed} />
                             {/* <InfoField fieldName={'locationWhereSafeButtonPressed'} fieldValue={item.locationWhereSafeButtonPressed} /> */}
 
                         </View>
