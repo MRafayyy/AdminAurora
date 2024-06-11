@@ -122,7 +122,7 @@ export default function Search_AppContacts({ navigation }) {
         } else {
             let tempList = AllUsers2.filter(item => {
                 if (item.name && typeof item.name === 'string') {
-                    return item.name.toLowerCase().startsWith(searchText);
+                    return item.name.toLowerCase().startsWith(searchText)  || item.name.toLowerCase().endsWith(searchText)
 
                 }
                 return false;

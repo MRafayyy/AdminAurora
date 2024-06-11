@@ -11,12 +11,14 @@ export default function Screen_Videos({ navigation, route }) {
     const [videoUrl, setVideoUrl] = useState('');
     //console.log(item._id)
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
 
     useEffect(() => {
 
         const item = route.params.item;
-        console.log(item._id)
+      //  console.log(item._id)
+
         const getVideoUrls = async () => {
             try {
                 let response = await fetch(`${ip}/women/getVideoUrls/${item._id}`, {
@@ -26,7 +28,9 @@ export default function Screen_Videos({ navigation, route }) {
                     },
                 });
 
-               // const url = await storage().ref('Rafay/video-2024-06-11 01:49 AM.mov').getDownloadURL();
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                  }
            
               // const textResponse = await response.text();
               // console.log('Response:', textResponse);
@@ -35,9 +39,7 @@ export default function Screen_Videos({ navigation, route }) {
               //  console.log(response)
                setVideoUrl(response.reverse())
 
-               
-                 //   setVideoUrl(response[0].download_url);
-                   // setLoading(false)
+
                 
             } catch (error) {
                 console.log(error);
@@ -49,7 +51,8 @@ export default function Screen_Videos({ navigation, route }) {
     }, [])
 
     return (
-
+error?
+<Text style={styles.errorText}>{error}</Text>:
         <View style={styles.mainContainer}>
 
         <FlatList
@@ -113,6 +116,11 @@ const styles = StyleSheet.create({
         height: 300,
     },
 
+    errorText: {
+        color: 'red',
+        fontSize: 16,
+      },
+
     mainContainer: {
         backgroundColor: colors.white
     },
@@ -125,7 +133,7 @@ const styles = StyleSheet.create({
         marginVertical: responsiveHeight(2),
         paddingVertical: responsiveHeight(2),
         borderRadius: 40,
-        marginHorizontal: responsiveWidth(1),
+        marginHorizontal: responsiveWidth(6),
         paddingHorizontal: responsiveWidth(0),
     },
 });

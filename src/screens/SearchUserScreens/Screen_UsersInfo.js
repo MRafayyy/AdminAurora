@@ -80,7 +80,7 @@ export default function Screen_UsersInfo({ navigation, route }) {
     try {
       const url = `${ip}/sendToOneWomen/${item._id}`;
 
-      if (TitleText.length === 0 || MessageText.length === 0) {
+      if (TitleText.trim().length === 0 || MessageText.trim().length === 0) {
         Alert.alert('Empty fields');
         setLoader(false);
       } else {
