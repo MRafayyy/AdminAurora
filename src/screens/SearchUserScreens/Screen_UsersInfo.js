@@ -63,6 +63,12 @@ export default function Screen_UsersInfo({ navigation, route }) {
     });
   };
 
+  const GoToVideoPage = () => {
+    navigation.navigate('Screen_Videos', {
+      item: item,
+    });
+  };
+
   const GoToHistoryPage = () => {
     navigation.navigate('Screen_RescueBtnHistory', {
       item: item,
@@ -111,8 +117,6 @@ export default function Screen_UsersInfo({ navigation, route }) {
           />
         )}
 
-        <InfoField fieldName={'Name'} fieldValue={item.name} />
-
         <Pressable
           disabled={!tracking}
           onPress={GoToTrackingPage}
@@ -138,6 +142,29 @@ export default function Screen_UsersInfo({ navigation, route }) {
               {item.rescueButtonHistory.length === 0
                 ? 'No History Available'
                 : 'Rescue Button History'}
+            </Text>
+          </Pressable>
+        }
+  
+        {
+          // item.rescueButtonHistory.length!==0 &&
+          <Pressable
+            onPress={GoToVideoPage}
+            style={[
+              styles.trackBtn,
+              { backgroundColor: item.rescue_video_download_urls.length === 0 ? colors.orange : colors.green },
+            ]}
+            
+            disabled={item.rescue_video_download_urls.length === 0
+              ? true
+              : false}
+            >
+              
+            <Text
+              style={styles.text}>
+              {item.rescue_video_download_urls.length === 0
+                ? 'No Video Available'
+                : 'Videos Available'}
             </Text>
           </Pressable>
         }
@@ -246,7 +273,7 @@ const styles = StyleSheet.create({
   },
 
   notifContainer: {
-    marginTop: responsiveHeight(10),
+    marginTop: responsiveHeight(12),
     justifyContent: 'center',
     alignItems: 'center',
   },
