@@ -85,21 +85,6 @@ error?
     </View>
 
 
-
-        // <View style={styles.container}>
-        //     {loading ? (
-        //         <ActivityIndicator size="large" color="#0000ff" />
-        //     ) : (
-        //         <Video
-        //             source={{ uri: 'https://firebasestorage.googleapis.com/v0/b/aurora-51db1.appspot.com/o/Rafay%2Fvideo-2024-06-11%2003%3A13%20AM.mov?alt=media&token=dd33ea31-9878-41ed-8feb-80683ec5264d' }}
-        //             style={styles.video}
-        //             controls={true}
-        //             paused={false}
-                    
-        //             resizeMode="contain"
-        //         />
-        //     )}
-        // </View>
     )
 }
 

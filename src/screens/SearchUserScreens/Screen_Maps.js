@@ -1,5 +1,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
+import 'dotenv/config'
 import {
     StyleSheet,
     View,
@@ -179,8 +180,8 @@ export default function Screen_Maps({ navigation, route }) {
                                 moveToLocation(origin.latitude, origin.longitude);
                             }}
                             query={{
-                                // key: 'AIzaSyBuCOu5bLUlVJmvxxGBFqDjvcsu5VeUyHY',
-                                key: 'AIzaSyCjfsbNmLKpqGnXwVZAxNRTSWyR357T2n4',
+                 
+                                key: process.env.GOOGLE_PLACES_APIKEY,
                                 language: 'en',
                             }}
                             onFail={error => {
@@ -227,8 +228,7 @@ export default function Screen_Maps({ navigation, route }) {
                                 moveToLocation(destination.latitude, destination.longitude);
                             }}
                             query={{
-                                // key: 'AIzaSyBuCOu5bLUlVJmvxxGBFqDjvcsu5VeUyHY',
-                                key: 'AIzaSyCjfsbNmLKpqGnXwVZAxNRTSWyR357T2n4',
+                                key: process.env.GOOGLE_PLACES_APIKEY,
                                 language: 'en',
                             }}
                             onFail={error => {
@@ -295,7 +295,7 @@ export default function Screen_Maps({ navigation, route }) {
                             strokeColor="blue"
                             strokeWidth={3}
                             destination={destination}
-                            apikey={'AIzaSyCjfsbNmLKpqGnXwVZAxNRTSWyR357T2n4'}
+                            apikey={process.env.MAP_VIEW_DIRECTION_APIKEY}
                         />
                     ) : null}
                 </MapView>
