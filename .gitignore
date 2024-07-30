@@ -2,6 +2,7 @@
 /.env
 /keys.xml
 /.keystore
+/gradle.properties
 
 
 # OSX
